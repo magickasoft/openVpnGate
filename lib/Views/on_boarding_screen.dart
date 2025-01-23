@@ -43,7 +43,7 @@ class _OnBoardingScreen extends State<OnBoardingScreen> {
                     currentIndex = index;
                   });
                 } else {
-                    return null;
+                    return;
                   }
               },
               itemBuilder: (context, index) {
@@ -86,11 +86,10 @@ class _OnBoardingScreen extends State<OnBoardingScreen> {
               },
             ),
           ),
-
           //Dots
           Expanded(
             flex: 1,
-            child: Container(
+            child: SizedBox(
               height: 2,
               width: MediaQuery.of(context).size.width,
               child: Row(
@@ -103,7 +102,6 @@ class _OnBoardingScreen extends State<OnBoardingScreen> {
 
             ),
           ),
-
           // buttons
           Expanded(
             flex: 2,
@@ -117,7 +115,6 @@ class _OnBoardingScreen extends State<OnBoardingScreen> {
                       if (currentIndex == contents.length - 1) {
                         var sharedPreferences = await SharedPreferences.getInstance();
                         sharedPreferences.setBool('newUser', true);
-
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
@@ -147,16 +144,13 @@ class _OnBoardingScreen extends State<OnBoardingScreen> {
                           ),
                         );
                       },
-                    child: Text('Skip', style: boldStyle.copyWith(fontSize: 16)),
-                ),
+                      child: Text('Skip', style: boldStyle.copyWith(fontSize: 16)),
+                    ),
                   ),
                 )
-
               ],
             ),
           ),
-
-
         ],
       ),
     );
