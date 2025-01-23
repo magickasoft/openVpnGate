@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:vpn_app/Views/home_screen.dart';
 import 'package:vpn_app/Views/on_boarding_screen.dart';
 
 void main() {

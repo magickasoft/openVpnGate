@@ -23,7 +23,8 @@ class _OnBoardingScreen extends State<OnBoardingScreen> {
             child: PageView.builder(
               itemCount: contents.length,
               itemBuilder: (context, index) {
-                return Column(
+                return Padding(padding: const EdgeInsets.all(30.0),
+                  child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SvgPicture.asset(
@@ -36,7 +37,18 @@ class _OnBoardingScreen extends State<OnBoardingScreen> {
                         return Text("Error loading image");
                       },
                     ),
+                    Text(
+                      contents[index].title,
+                      style: boldStyle,
+                      textAlign: TextAlign.center,
+                    ),
+                    Text(
+                      contents[index].title,
+                      style: mediumStyle,
+                      textAlign: TextAlign.center,
+                    )
                   ],
+                )
                 );
               },
             ),
