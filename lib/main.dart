@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vpn_app/Controller/home_provider.dart';
 import 'package:vpn_app/Views/on_boarding_screen.dart';
 import 'package:vpn_app/Views/splash_screen.dart';
 import 'package:vpn_app/constant.dart';
@@ -47,15 +49,20 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        appBarTheme: const AppBarTheme(
-          backgroundColor: primaryColor,centerTitle: true,
-          systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: primaryColor, systemNavigationBarColor: primaryColor)
-        )
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<HomeProvider>(create: (context) => HomeProvider()),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          appBarTheme: const AppBarTheme(
+            backgroundColor: primaryColor,centerTitle: true,
+            systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: primaryColor, systemNavigationBarColor: primaryColor)
+          )
+        ),
+        home: newUser ? OnBoardingScreen() : SplashScreen(), // Переход в зависимости от newUser
       ),
-      home: newUser ? OnBoardingScreen() : SplashScreen(), // Переход в зависимости от newUser
     );
   }
 }

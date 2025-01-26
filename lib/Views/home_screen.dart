@@ -1,5 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:vpn_app/Controller/home_provider.dart';
+import 'package:vpn_app/Controller/services/vpn_engine.dart';
+import 'package:vpn_app/Views/CustomWidget/count_down_timer.dart';
+
 import 'package:vpn_app/Views/CustomWidget/home_card.dart';
 import '../constant.dart';
 
@@ -9,6 +14,8 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final homeProvider = Provider.of<HomeProvider>(context);
+
     return Scaffold(
       backgroundColor: primaryColor,
       appBar: AppBar(
@@ -35,9 +42,12 @@ class HomeScreen extends StatelessWidget {
         child: 
           Column(
             children: [
-              SizedBox(height: 10,),
-              Expanded(flex: 5, child: VpnConnectButton()),
+              // SizedBox(height: 10,),
+              Expanded(flex: 3, child: VpnConnectButton(homeProvider),),
               Expanded(flex: 2, child: ConnectionStatusLabel()),
+              Expanded(flex: 1,
+                child: CountDownTimer(startTimer: homeProvider.vpnState == VpnEngine.vpnConnected,),
+              ),
               Expanded(flex: 1, child: Container()),
               Expanded(flex: 5, child: ConnectedVpnDetails(),),              
             ]
@@ -45,15 +55,14 @@ class HomeScreen extends StatelessWidget {
       )
     );
   }
-}
 
-Widget VpnConnectButton(){
+  Widget VpnConnectButton(HomeProvider homeProvider){
   return Semantics(
     button: true,
     child: InkWell(
       borderRadius: BorderRadius.circular(100),
       onTap: (){
-
+        homeProvider.changevpnState(VpnEngine.vpnConnected);
       },
       child: Container(
       padding: EdgeInsets.all(16),
@@ -120,6 +129,8 @@ Widget VpnConnectButton(){
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+
+              ///Power Icon
               const Icon(
                 Icons.power_settings_new,
                 size: 28,
@@ -139,7 +150,7 @@ Widget VpnConnectButton(){
   );
 }
 
-Widget ConnectionStatusLabel(){
+  Widget ConnectionStatusLabel(){
   return Container(
     height: 40,
     decoration: BoxDecoration(
@@ -152,7 +163,7 @@ Widget ConnectionStatusLabel(){
   );
 }
 
-Widget ConnectedVpnDetails(){
+  Widget ConnectedVpnDetails(){
   return Column(
     children: [
       Expanded(
@@ -199,4 +210,5 @@ Widget ConnectedVpnDetails(){
       )
     ],
   );
+}
 }
