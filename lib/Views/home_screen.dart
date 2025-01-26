@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:vpn_app/Views/CustomWidget/home_card.dart';
 import '../constant.dart';
 
 
@@ -35,8 +36,10 @@ class HomeScreen extends StatelessWidget {
           Column(
             children: [
               SizedBox(height: 10,),
-              VpnContentButton(),
-              ConnectionStatusLabel(),
+              Expanded(flex: 5, child: VpnConnectButton()),
+              Expanded(flex: 2, child: ConnectionStatusLabel()),
+              Expanded(flex: 1, child: Container()),
+              Expanded(flex: 5, child: ConnectedVpnDetails(),),              
             ]
         ),
       )
@@ -44,7 +47,7 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-Widget VpnContentButton(){
+Widget VpnConnectButton(){
   return Semantics(
     button: true,
     child: InkWell(
@@ -138,13 +141,62 @@ Widget VpnContentButton(){
 
 Widget ConnectionStatusLabel(){
   return Container(
-    height: 50,
+    height: 40,
     decoration: BoxDecoration(
       color: iconBlueColor,
       borderRadius: BorderRadius.circular(25),
     ),
-    margin: EdgeInsets.symmetric(horizontal: 70, vertical: 5),
+    margin: EdgeInsets.symmetric(horizontal: 70, vertical: 50),
     child: Center(
       child: Text('Disconnect',style: boldStyle,)),   
+  );
+}
+
+Widget ConnectedVpnDetails(){
+  return Column(
+    children: [
+      Expanded(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Expanded(
+              child: HomeCard(
+                title: 'Country',
+                subtitle: 'Free',
+                icon: Icons.vpn_lock_rounded,
+              ),
+            ),
+            Expanded(
+              child: HomeCard(
+                title: '100 ms',
+                subtitle: 'Ping',
+                icon: CupertinoIcons.chart_bar_alt_fill,
+              ),
+            ),
+          ],
+        ),
+      ),
+      Expanded(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Expanded(
+              child: HomeCard(
+                title: '0 kbps',
+                subtitle: 'Download',
+                icon: Icons.arrow_downward_rounded,
+              ),
+            ),
+            Expanded(
+              child: HomeCard(
+                title: '0 kbps',
+                subtitle: 'Upload',
+                icon: Icons.arrow_upward_rounded,
+              ),
+            ),
+          ],
+        ),
+      )
+    ],
   );
 }
