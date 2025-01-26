@@ -43,7 +43,7 @@ class HomeScreen extends StatelessWidget {
           Column(
             children: [
               // SizedBox(height: 10,),
-              Expanded(flex: 3, child: VpnConnectButton(homeProvider),),
+              Expanded(flex: 3, child: VpnConnectButton(context)),
               Expanded(flex: 2, child: ConnectionStatusLabel()),
               Expanded(flex: 1,
                 child: CountDownTimer(startTimer: homeProvider.vpnState == VpnEngine.vpnConnected,),
@@ -53,10 +53,16 @@ class HomeScreen extends StatelessWidget {
             ]
         ),
       )
+
+
+
+
     );
   }
 
-  Widget VpnConnectButton(HomeProvider homeProvider){
+  Widget VpnConnectButton(BuildContext context){
+  final homeProvider = Provider.of<HomeProvider>(context);
+
   return Semantics(
     button: true,
     child: InkWell(
