@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vpn_app/Views/on_boarding_screen.dart';
 import 'package:vpn_app/Views/splash_screen.dart';
+import 'package:vpn_app/constant.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -46,10 +47,14 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    print('newUser: $newUser');
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        appBarTheme: const AppBarTheme(
+          backgroundColor: primaryColor,centerTitle: true,
+          systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: primaryColor, systemNavigationBarColor: primaryColor)
+        )
+      ),
       home: newUser ? OnBoardingScreen() : SplashScreen(), // Переход в зависимости от newUser
     );
   }
