@@ -37,13 +37,13 @@ class HomeScreen extends StatelessWidget {
           )
         ],
       ),
-      body: Container(
+      body: SizedBox(
         width: MediaQuery.of(context).size.width,
         child: 
           Column(
             children: [
               // SizedBox(height: 10,),
-              Expanded(flex: 3, child: VpnConnectButton(context)),
+              Expanded(flex: 5, child: VpnConnectButton(context)),
               Expanded(flex: 2, child: ConnectionStatusLabel()),
               Expanded(flex: 1,
                 child: CountDownTimer(startTimer: homeProvider.vpnState == VpnEngine.vpnConnected,),
@@ -142,7 +142,7 @@ class HomeScreen extends StatelessWidget {
                 size: 28,
                 color: iconBlueColor,
               ),
-              SizedBox(height: 4,),
+              SizedBox(height: 3,),
               Text('Tap to Connect',
                 style: greyStyle,
               )
@@ -163,7 +163,7 @@ class HomeScreen extends StatelessWidget {
       color: iconBlueColor,
       borderRadius: BorderRadius.circular(25),
     ),
-    margin: EdgeInsets.symmetric(horizontal: 70, vertical: 50),
+    margin: EdgeInsets.symmetric(horizontal: 70, vertical: 20),
     child: Center(
       child: Text('Disconnect',style: boldStyle,)),   
   );
