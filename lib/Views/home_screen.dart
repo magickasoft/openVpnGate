@@ -1,5 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:vpn_app/Controller/home_provider.dart';
+import 'package:vpn_app/Controller/services/vpn_engine.dart';
+import 'package:vpn_app/Views/CustomWidget/count_down_timer.dart';
+
+import 'package:vpn_app/Views/CustomWidget/home_card.dart';
 import '../constant.dart';
 
 
@@ -8,6 +14,8 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final homeProvider = Provider.of<HomeProvider>(context);
+
     return Scaffold(
       backgroundColor: primaryColor,
       appBar: AppBar(
@@ -29,28 +37,38 @@ class HomeScreen extends StatelessWidget {
           )
         ],
       ),
-      body: Container(
+      body: SizedBox(
         width: MediaQuery.of(context).size.width,
         child: 
           Column(
             children: [
-              SizedBox(height: 10,),
-              VpnContentButton(),
-              ConnectionStatusLabel(),
+              // SizedBox(height: 10,),
+              Expanded(flex: 5, child: VpnConnectButton(context)),
+              Expanded(flex: 2, child: ConnectionStatusLabel()),
+              Expanded(flex: 1,
+                child: CountDownTimer(startTimer: homeProvider.vpnState == VpnEngine.vpnConnected,),
+              ),
+              Expanded(flex: 1, child: Container()),
+              Expanded(flex: 5, child: ConnectedVpnDetails(),),              
             ]
         ),
       )
+
+
+
+
     );
   }
-}
 
-Widget VpnContentButton(){
+  Widget VpnConnectButton(BuildContext context){
+  final homeProvider = Provider.of<HomeProvider>(context);
+
   return Semantics(
     button: true,
     child: InkWell(
       borderRadius: BorderRadius.circular(100),
       onTap: (){
-
+        homeProvider.changevpnState(VpnEngine.vpnConnected);
       },
       child: Container(
       padding: EdgeInsets.all(16),
@@ -117,12 +135,14 @@ Widget VpnContentButton(){
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+
+              ///Power Icon
               const Icon(
                 Icons.power_settings_new,
                 size: 28,
                 color: iconBlueColor,
               ),
-              SizedBox(height: 4,),
+              SizedBox(height: 3,),
               Text('Tap to Connect',
                 style: greyStyle,
               )
@@ -136,15 +156,65 @@ Widget VpnContentButton(){
   );
 }
 
-Widget ConnectionStatusLabel(){
+  Widget ConnectionStatusLabel(){
   return Container(
-    height: 50,
+    height: 40,
     decoration: BoxDecoration(
       color: iconBlueColor,
       borderRadius: BorderRadius.circular(25),
     ),
-    margin: EdgeInsets.symmetric(horizontal: 70, vertical: 5),
+    margin: EdgeInsets.symmetric(horizontal: 70, vertical: 20),
     child: Center(
       child: Text('Disconnect',style: boldStyle,)),   
   );
+}
+
+  Widget ConnectedVpnDetails(){
+  return Column(
+    children: [
+      Expanded(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Expanded(
+              child: HomeCard(
+                title: 'Country',
+                subtitle: 'Free',
+                icon: Icons.vpn_lock_rounded,
+              ),
+            ),
+            Expanded(
+              child: HomeCard(
+                title: '100 ms',
+                subtitle: 'Ping',
+                icon: CupertinoIcons.chart_bar_alt_fill,
+              ),
+            ),
+          ],
+        ),
+      ),
+      Expanded(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Expanded(
+              child: HomeCard(
+                title: '0 kbps',
+                subtitle: 'Download',
+                icon: Icons.arrow_downward_rounded,
+              ),
+            ),
+            Expanded(
+              child: HomeCard(
+                title: '0 kbps',
+                subtitle: 'Upload',
+                icon: Icons.arrow_upward_rounded,
+              ),
+            ),
+          ],
+        ),
+      )
+    ],
+  );
+}
 }
