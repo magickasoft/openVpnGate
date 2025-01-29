@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vpn_app/Controller/home_provider.dart';
+import 'package:vpn_app/Controller/location_provider.dart';
 import 'package:vpn_app/Views/on_boarding_screen.dart';
 import 'package:vpn_app/Views/splash_screen.dart';
 import 'package:vpn_app/Views/constant.dart';
@@ -52,6 +53,7 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<HomeProvider>(create: (context) => HomeProvider()),
+        ChangeNotifierProvider<LocationProvider>(create: (context) => LocationProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
