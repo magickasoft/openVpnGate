@@ -7,6 +7,10 @@ const blue=Color(0xFF3E64C5);
 const gradientblue=Color(0xFF65B8DB);
 const lightGradientblue=Color (0xFF92D3EF);
 const lightblue=Color (0xFF6F8DD9);
+const green=Color(0xFF00FF00);
+const gradientgreen=Color.fromARGB(255, 113, 208, 113);
+const yellow=Color(0xFFFFD700);
+const gradientyellow=Color.fromARGB(255, 205, 189, 95);
 const iconBlueColor=Color (0xFF48A7D3);
 const greytext=Color(0xFF707070);
 

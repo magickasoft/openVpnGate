@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vpn_app/Controller/home_provider.dart';
 import 'package:vpn_app/Controller/services/vpn_engine.dart';
+import 'package:vpn_app/Models/vpn_status.dart';
 import 'package:vpn_app/Views/CustomWidget/count_down_timer.dart';
 
 import 'package:vpn_app/Views/CustomWidget/home_card.dart';
@@ -57,7 +58,7 @@ class HomeScreen extends StatelessWidget {
                 child: CountDownTimer(startTimer: homeProvider.vpnState == VpnEngine.vpnConnected,),
               ),
               Expanded(flex: 1, child: Container()),
-              Expanded(flex: 5, child: ConnectedVpnDetails(),),              
+              Expanded(flex: 5, child: ConnectedVpnDetails(context),),              
             ]
         ),
       )
@@ -171,58 +172,73 @@ class HomeScreen extends StatelessWidget {
       color: iconBlueColor,
       borderRadius: BorderRadius.circular(25),
     ),
-    margin: EdgeInsets.symmetric(horizontal: 70, vertical: 20),
+    margin: EdgeInsets.symmetric(horizontal: 70, vertical: 10),
     child: Center(
       child: Text('Disconnect',style: boldStyle,)),   
   );
 }
 
-  Widget ConnectedVpnDetails(){
-  return Column(
-    children: [
-      Expanded(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Expanded(
-              child: HomeCard(
-                title: 'Country',
-                subtitle: 'Free',
-                icon: Icons.vpn_lock_rounded,
-              ),
+  Widget ConnectedVpnDetails(BuildContext context){
+    final homeProvider = Provider.of<HomeProvider>(context);
+
+    return Padding(
+      padding: const EdgeInsets.only(left: 10, right: 10, top: 0),
+      child: Column(
+        children: [
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Expanded(
+                  child: HomeCard(
+                    title: homeProvider.vpn == null || homeProvider.vpn!.countryLong.isEmpty ? 'Country' : homeProvider.vpn!.countryLong,
+                    subtitle: 'Free',
+                    icon: Icons.vpn_lock_rounded,
+                    image: homeProvider.vpn == null || homeProvider.vpn!.countryLong.isEmpty ? null : 'assets/flags/${homeProvider.vpn!.countryShort.toLowerCase()}.png',
+                  ),
+                ),
+                Expanded(
+                  child: HomeCard(
+                    title: homeProvider.vpn == null || homeProvider.vpn!.countryLong.isEmpty ? '100 ms' : '${homeProvider.vpn!.ping} ms',
+                    subtitle: 'Ping',
+                    icon: CupertinoIcons.chart_bar_alt_fill,
+                  ),
+                ),
+              ],
             ),
-            Expanded(
-              child: HomeCard(
-                title: '100 ms',
-                subtitle: 'Ping',
-                icon: CupertinoIcons.chart_bar_alt_fill,
-              ),
+          ),
+          Expanded(
+            child: StreamBuilder<VpnStatus>(
+              initialData: VpnStatus(),
+              stream: VpnEngine.vpnStatusSnapshot(),
+              builder:(context, snapshot) {
+                final byteIn = (snapshot.data?.byteIn) ?? 0;
+                final byteOut = (snapshot.data?.byteOut) ?? 0;
+
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Expanded(
+                      child: HomeCard(
+                        title: byteIn == 0 ? '0 kbps' : '$byteIn kbps',
+                        subtitle: 'Download',
+                        icon: Icons.arrow_downward_rounded,
+                      ),
+                    ),
+                    Expanded(
+                      child: HomeCard(
+                        title: byteOut == 0 ? '0 kbps' : '$byteOut kbps',
+                        subtitle: 'Upload',
+                        icon: Icons.arrow_upward_rounded,
+                      ),
+                    ),
+                  ],
+                );
+              },
             ),
-          ],
-        ),
+          )
+        ],
       ),
-      Expanded(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Expanded(
-              child: HomeCard(
-                title: '0 kbps',
-                subtitle: 'Download',
-                icon: Icons.arrow_downward_rounded,
-              ),
-            ),
-            Expanded(
-              child: HomeCard(
-                title: '0 kbps',
-                subtitle: 'Upload',
-                icon: Icons.arrow_upward_rounded,
-              ),
-            ),
-          ],
-        ),
-      )
-    ],
-  );
-}
+    );
+  }
 }

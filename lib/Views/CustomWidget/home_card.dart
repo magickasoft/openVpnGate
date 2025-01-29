@@ -4,13 +4,15 @@ import 'package:vpn_app/Views/constant.dart';
 class HomeCard extends StatelessWidget {
   final String title, subtitle;
   final IconData icon;
+  final image;
 
-  const HomeCard(
-    {
-      super.key,
-      required this.title,
-      required this.subtitle,
-      required this.icon});
+  const HomeCard({
+    super.key,
+    required this.title,
+    required this.subtitle,
+    required this.icon,
+    this.image=null
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +25,22 @@ class HomeCard extends StatelessWidget {
             child: Container(
               height: 50,
               width: 50,
-            decoration: BoxDecoration(
+            decoration: 
+            image !=null 
+            ? BoxDecoration( gradient: LinearGradient(
+                  begin: FractionalOffset.topRight,
+                  end: FractionalOffset.bottomLeft,
+                  colors: [
+                    blue,
+                    gradientblue,
+                  ]),
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                    image: AssetImage(image),
+                    fit: BoxFit.cover
+                  ),              
+            ):
+            BoxDecoration(
               gradient: LinearGradient(
                   begin: FractionalOffset.topRight,
                   end: FractionalOffset.bottomLeft,
@@ -31,7 +48,7 @@ class HomeCard extends StatelessWidget {
                     blue,
                     gradientblue,
                   ]),
-              shape: BoxShape.circle,
+                shape: BoxShape.circle,
               ),
               child: Icon(icon,
                 size: 26, color: Colors.white,),

@@ -6,6 +6,7 @@ import 'package:vpn_app/Controller/location_provider.dart';
 import 'package:vpn_app/Models/vpn.dart';
 import 'package:vpn_app/Views/CustomWidget/alert_box.dart';
 import 'package:vpn_app/Views/CustomWidget/location_card.dart';
+import 'package:vpn_app/Views/CustomWidget/vpn_card.dart';
 import 'package:vpn_app/Views/constant.dart';
 
 class LocationScreen extends StatefulWidget {
@@ -71,33 +72,40 @@ class _LocationScreenState extends State<LocationScreen> {
 
   serverData(LocationProvider locationProvider) {
     return ListView.builder(
-      itemBuilder: (con,index){
+      padding: EdgeInsets.only(top: 4.0),
+      shrinkWrap: true,
+      itemCount: countries.length,
+      itemBuilder: (context, index){
+        final country = countries[index];
+        final flag = flags[index];
+
         return LocationCard(
-          countryName: locationProvider.countryList[index],
-          flag: locationProvider.flagList[index],
+          countryName: country,
+          flag: flag,
           tap: (istap){
             setState(() {
-              if(expandedCountry == locationProvider.countryList[index]){
+              if(expandedCountry == country){
                 expandedCountry = null;
                 istap = false;
                 servers = locationProvider.vpnList;
               }
               else {
-                expandedCountry = locationProvider.countryList[index];
+                expandedCountry = country;
                 istap = true;
-                servers = serversForSelectedCountry(locationProvider.countryList[index]);
+                servers = serversForSelectedCountry(country);
               }
             });
           },
           server: locationProvider.vpnList.isEmpty 
             ? [CircularProgressIndicator()]
             : servers.asMap().entries.map((MapEntry<int, Vpn> entry) {
-              return Container();
+
+              return VpnCard(vpn: entry.value);
             }).toList(),
-          isExpanded: locationProvider.countryList[index] == expandedCountry,
+          isExpanded: country == expandedCountry,
         );
-    },
-    itemCount: 7);
+      },
+    );
   }
 
   loadingWidget(){
