@@ -15,6 +15,14 @@ class LocationProvider extends ChangeNotifier {
   List<String> get countryList => _countryList;
   List<String> get flagList => _flagList;
 
+  Future<void> getVpnData() async {
+    _isLoading = true;
+    _vpnList.clear();
+    _vpnList = await Api.getVpnServers();
+    _isLoading = false;
+    notifyListeners();
+  }
+
   void _setLoading(bool value) {
     _isLoading = value;
     notifyListeners();

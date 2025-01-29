@@ -3,7 +3,9 @@ import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:vpn_app/Controller/api/apis.dart';
 import 'package:vpn_app/Controller/location_provider.dart';
+import 'package:vpn_app/Models/vpn.dart';
 import 'package:vpn_app/Views/CustomWidget/alert_box.dart';
+import 'package:vpn_app/Views/CustomWidget/location_card.dart';
 import 'package:vpn_app/Views/constant.dart';
 
 class LocationScreen extends StatefulWidget {
@@ -17,6 +19,9 @@ class _LocationScreenState extends State<LocationScreen> {
 
   List<String> flags = [];
   List<String> countries = [];
+  List<Vpn> servers = [];
+  String ? selectedCountry;
+  String ? expandedCountry;
 
   @override
   void initState() {
@@ -29,11 +34,13 @@ class _LocationScreenState extends State<LocationScreen> {
   void gettingServers()async{
     final locationprovider = Provider.of<LocationProvider>(context, listen: false);
     await locationprovider.getCountriesData();
+    await locationprovider.getVpnData();
 
     if (mounted) {
       setState(() {
         countries = locationprovider.countryList;
         flags = locationprovider.flagList;
+        servers = locationprovider.vpnList;
       });
     }
   }
@@ -56,7 +63,6 @@ class _LocationScreenState extends State<LocationScreen> {
       ),
       body: locationProvider.isLoading
           ? loadingWidget()
-          // : locationProvider.vpnList.isEmpty
           : locationProvider.countryList.isEmpty
               ? vpnNotFound()
               : serverData(locationProvider),
@@ -66,12 +72,32 @@ class _LocationScreenState extends State<LocationScreen> {
   serverData(LocationProvider locationProvider) {
     return ListView.builder(
       itemBuilder: (con,index){
-        return Text(
-          locationProvider.countryList[index],
-          style: TextStyle(color: Colors.white),
+        return LocationCard(
+          countryName: locationProvider.countryList[index],
+          flag: locationProvider.flagList[index],
+          tap: (istap){
+            setState(() {
+              if(expandedCountry == locationProvider.countryList[index]){
+                expandedCountry = null;
+                istap = false;
+                servers = locationProvider.vpnList;
+              }
+              else {
+                expandedCountry = locationProvider.countryList[index];
+                istap = true;
+                servers = serversForSelectedCountry(locationProvider.countryList[index]);
+              }
+            });
+          },
+          server: locationProvider.vpnList.isEmpty 
+            ? [CircularProgressIndicator()]
+            : servers.asMap().entries.map((MapEntry<int, Vpn> entry) {
+              return Container();
+            }).toList(),
+          isExpanded: locationProvider.countryList[index] == expandedCountry,
         );
     },
-    itemCount: locationProvider.countryList.length,);
+    itemCount: 7);
   }
 
   loadingWidget(){
@@ -93,5 +119,13 @@ class _LocationScreenState extends State<LocationScreen> {
 
   vpnNotFound(){
     return AlertBox(text: 'Sorry. VPNs Not Found! 😕',);
+  }
+
+  List<Vpn> serversForSelectedCountry(String country){
+    final locationProvider = Provider.of<LocationProvider>(context, listen: false);
+    List<Vpn> data = locationProvider.vpnList;
+    List<Vpn> myservers = data.where((server) => server.countryLong.toLowerCase() == country.toLowerCase()).toList();
+
+    return myservers;
   }
 }
