@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/widgets.dart';
-import 'package:vpn_app/constant.dart';
+import 'package:vpn_app/Views/constant.dart';
 
 class CountDownTimer extends StatefulWidget {
   final bool startTimer;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:vpn_app/Views/home_screen.dart';
-import 'package:vpn_app/constant.dart';
+import 'package:vpn_app/Views/constant.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

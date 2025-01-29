@@ -6,7 +6,8 @@ import 'package:vpn_app/Controller/services/vpn_engine.dart';
 import 'package:vpn_app/Views/CustomWidget/count_down_timer.dart';
 
 import 'package:vpn_app/Views/CustomWidget/home_card.dart';
-import '../constant.dart';
+import 'package:vpn_app/Views/location_screen.dart';
+import 'constant.dart';
 
 
 class HomeScreen extends StatelessWidget {
@@ -31,6 +32,13 @@ class HomeScreen extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => LocationScreen(),
+                ),
+              );
+              
             },
             icon: Icon(CupertinoIcons.globe,
                 color: Colors.white, size: 28),

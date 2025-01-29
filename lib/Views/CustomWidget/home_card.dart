@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vpn_app/constant.dart';
+import 'package:vpn_app/Views/constant.dart';
 
 class HomeCard extends StatelessWidget {
   final String title, subtitle;

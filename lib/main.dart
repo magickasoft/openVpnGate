@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vpn_app/Controller/home_provider.dart';
 import 'package:vpn_app/Views/on_boarding_screen.dart';
 import 'package:vpn_app/Views/splash_screen.dart';
-import 'package:vpn_app/constant.dart';
+import 'package:vpn_app/Views/constant.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

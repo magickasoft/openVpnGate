@@ -4,7 +4,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:vpn_app/Views/CustomWidget/simple_button.dart';
 import 'package:vpn_app/Views/splash_screen.dart';
-import 'package:vpn_app/constant.dart';
+import 'package:vpn_app/Views/constant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Models/splash_screen_content.dart';
