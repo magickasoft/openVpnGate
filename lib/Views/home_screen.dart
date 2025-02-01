@@ -7,6 +7,7 @@ import 'package:vpn_app/Models/vpn_status.dart';
 import 'package:vpn_app/Views/CustomWidget/count_down_timer.dart';
 
 import 'package:vpn_app/Views/CustomWidget/home_card.dart';
+import 'package:vpn_app/Views/ip_detail_screen.dart';
 import 'package:vpn_app/Views/location_screen.dart';
 import 'constant.dart';
 
@@ -14,11 +15,9 @@ import 'constant.dart';
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
-
-
   @override
   Widget build(BuildContext context) {
-    final homeProvider = Provider.of<HomeProvider>(context);
+    final homeProvider = Provider.of<VpnProvider>(context);
 
     VpnEngine.vpnStatusSnapshot().listen((event) {
       homeProvider.changevpnState(event);
@@ -44,7 +43,7 @@ class HomeScreen extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (BuildContext context) => LocationScreen(),
+                  builder: (BuildContext context) => LocationScreen(countries: [], serverList: [], flags: []),
                 ),
               );
               
@@ -74,7 +73,7 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget VpnConnectButton(BuildContext context){
-  final homeProvider = Provider.of<HomeProvider>(context);
+  final homeProvider = Provider.of<VpnProvider>(context);
 
   return Semantics(
     button: true,
@@ -141,25 +140,28 @@ class HomeScreen extends StatelessWidget {
             ],
         ),  
         child: Container(
-          decoration: BoxDecoration(
-          shape: BoxShape.circle, color: white),
+          padding: EdgeInsets.all(19),
+          decoration: BoxDecoration(shape: BoxShape.circle, color: white),
           height: 120, 
           width: 120,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-
-              ///Power Icon
-              const Icon(
-                Icons.power_settings_new,
-                size: 28,
-                color: iconBlueColor,
-              ),
-              SizedBox(height: 3,),
-              Text('Tap to Connect',
-                style: greyStyle,
-              )
-            ],
+          child: Padding(
+            padding: EdgeInsets.only(bottom: 8.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                ///Icon
+                const Icon(
+                  Icons.power_settings_new,
+                  size: 30,
+                  color: iconBlueColor,
+                ),
+                SizedBox(height: 4,),
+                Text('Tap to Connect',
+                  style: greyStyle,
+                )
+              ],
+          ),
           ),
       ),
     ),
@@ -183,7 +185,7 @@ class HomeScreen extends StatelessWidget {
 }
 
   Widget ConnectedVpnDetails(BuildContext context){
-    final homeProvider = Provider.of<HomeProvider>(context);
+    final homeProvider = Provider.of<VpnProvider>(context);
 
     return Padding(
       padding: const EdgeInsets.only(left: 10, right: 10, top: 0),
@@ -194,11 +196,19 @@ class HomeScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Expanded(
-                  child: HomeCard(
-                    title: homeProvider.vpn.countryLong.isEmpty ? 'Country' : homeProvider.vpn.countryLong,
-                    subtitle: 'Free',
-                    icon: Icons.vpn_lock_rounded,
-                    image: homeProvider.vpn.countryLong.isEmpty ? null : 'assets/flags/${homeProvider.vpn.countryShort.toLowerCase()}.png',
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: ((context) => IpDetailScreen()),),);
+                    },
+                    child: HomeCard(
+                      title: homeProvider.vpn.countryLong.isEmpty ? 'Country' : homeProvider.vpn.countryLong,
+                      subtitle: 'Free',
+                      icon: Icons.vpn_lock_rounded,
+                      image: homeProvider.vpn.countryLong.isEmpty ? null : 'assets/flags/${homeProvider.vpn.countryShort.toLowerCase()}.png',
+                  ),
                   ),
                 ),
                 Expanded(

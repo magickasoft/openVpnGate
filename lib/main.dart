@@ -53,7 +53,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<HomeProvider>(create: (context) => HomeProvider()),
+        ChangeNotifierProvider<VpnProvider>(create: (context) => VpnProvider()),
         ChangeNotifierProvider<LocationProvider>(create: (context) => LocationProvider()),
       ],
       child: MaterialApp(

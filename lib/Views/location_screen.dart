@@ -9,45 +9,78 @@ import 'package:vpn_app/Views/CustomWidget/vpn_card.dart';
 import 'package:vpn_app/Views/constant.dart';
 
 class LocationScreen extends StatefulWidget {
-  const LocationScreen({ super.key });
+  final List<Vpn> serverList;
+  final List<String> countries;
+  final List<String> flags;
+
+  LocationScreen({Key? key, required this.serverList, required this.countries, required this.flags}) : super(key: key);
 
   @override
-  State<LocationScreen> createState() => _LocationScreenState();
+  _LocationScreenState createState() => _LocationScreenState();
 }
 
 class _LocationScreenState extends State<LocationScreen> {
-
-  List<String> flags = [];
+  final String apiUrl = 'https://www.vpngate.net/api/iphone/';
   List<String> countries = [];
-  List<Vpn> servers = [];
   String ? selectedCountry;
+  List<Vpn> servers = [];
+  List<String> flags = [];
+  TextEditingController textcontroller = TextEditingController();
+  bool istap = false;
   String ? expandedCountry;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      gettingServers();
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   gettingServers();
+    // });
+    gettingServers();
   }
 
-  void gettingServers()async{
-    final locationprovider = Provider.of<LocationProvider>(context, listen: false);
-    await locationprovider.getCountriesData();
-    await locationprovider.getVpnData();
+  void gettingServers() async {
+    final locationController = Provider.of<LocationProvider>(context, listen: false);
 
-    if (mounted) {
-      setState(() {
-        countries = locationprovider.countryList;
-        flags = locationprovider.flagList;
-        servers = locationprovider.vpnList;
-      });
+    try {
+
+      if (locationController.vpnList.isEmpty || locationController.countryList.isEmpty || locationController.flagList.isEmpty) {
+        await locationController.getVpnData();
+        await locationController.getCountriesData();
+      
+        if (mounted) {
+          setState(() {
+            servers = locationController.vpnList;
+            countries = locationController.countryList;
+            flags = locationController.flagList;
+            print(servers.length);
+          });
+        }
+      } else {
+        await locationController.getVpnData();
+        await locationController.getCountriesData();
+      } 
+
+    } catch (e) {
+      print(e);
     }
+
+    // final locationprovider = Provider.of<LocationProvider>(context, listen: false);
+    // await locationprovider.getCountriesData();
+    // await locationprovider.getVpnData();
+
+    // if (mounted) {
+    //   setState(() {
+    //     countries = locationprovider.countryList;
+    //     flags = locationprovider.flagList;
+    //     servers = locationprovider.vpnList;
+    //   });
+    // }
   }
 
   @override
   Widget build(BuildContext context) {
     final locationProvider = Provider.of<LocationProvider>(context);
+    // final themeChange = Provider.of<ThemeChanger>(context);
 
     return Scaffold(
       backgroundColor: primaryColor,

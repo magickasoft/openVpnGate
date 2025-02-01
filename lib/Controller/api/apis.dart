@@ -1,7 +1,10 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:csv/csv.dart';
 import 'package:http/http.dart';
+import 'package:vpn_app/Controller/helpers/pref.dart';
+import 'package:vpn_app/Models/network_details.dart';
 import 'package:vpn_app/Models/vpn.dart';
 
 class Api {
@@ -10,31 +13,68 @@ class Api {
     final List<Vpn> vpnList = [];
 
     try{
-      final response = await get(Uri.parse('https://www.vpngate.net/api/iphone/'));
-      final csvString = response.body.split("#")[1].replaceAll('*', '');
-      List<List<dynamic>> csvList = const CsvToListConverter().convert(csvString);
-        
-      final header = csvList[0];
-      Map<String, dynamic> tempJson = {};
+      final res = await get(Uri.parse('https://www.vpngate.net/api/iphone/'));
+      final csvString = res.body.split("#")[1].replaceAll('*', '');
 
-      for(int i=1; i<header.length; ++i) {
-        for(int j=0; j<header.length; ++j) {
-          tempJson.addAll({(header[j].toString()): csvList[i][j]});
+      List<List<dynamic>> list = const CsvToListConverter().convert(csvString);
+        
+      final header = list[0];
+
+      for(int i = 1; i < list.length - 1; ++i) {
+        Map<String, dynamic> tempJson = {};
+
+        for(int j = 0; j < header.length; ++j) {
+          tempJson.addAll({(header[j].toString()): list[i][j]});
         }
         vpnList.add(Vpn.fromJson(tempJson));
       }
-      log(vpnList.first.hostName);
+    } catch(e){
+      log('\ngetVpnServers: $e');
     }
-    catch(e){
-      log(e.toString());
+
+    vpnList.shuffle();
+
+    if (vpnList.isNotEmpty) {
+      Pref.vpnList = vpnList;
     }
 
     return vpnList;
   }
 
-  static Future<List<String>> getCountries() async {
-  /// Fetches a list of unique country names from the VPN Gate API.
+  static Future<List<String>> getCountriesFlags() async {
+    List<String> flags = [];
+    try {
+      final response = await get(Uri.parse('https://www.vpngate.net/api/iphone/'));
 
+      if (response.statusCode == 200) {
+
+        List<String> lines = response.body.split("\n");
+        print(lines);
+
+        Set<String> uniqueCountries = {};
+
+        for (int i = 2; i < lines.length; i++) {
+          List<String> serverInfo = lines[i].split(",");
+          if (serverInfo.length > 6) {
+            uniqueCountries.add(serverInfo[6]);
+          }
+        } 
+
+        flags = uniqueCountries.toList();
+        await Pref.storeCountryFlags(flags);
+
+      } else {
+        print(
+          'Error: Unable to fetch data. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+
+    return flags;
+  }
+
+  static Future<List<String>> getCountries() async {
     List<String> countries = [];
     try {
       final response = await get(Uri.parse('https://www.vpngate.net/api/iphone/'));
@@ -55,7 +95,8 @@ class Api {
         }
 
         countries = uniqueCountries.toList();
-        print(countries);
+        await Pref.storeCountries(countries);
+
       } else {
         print('Error: Unable to fetch data. Status code: ${response.statusCode}');
       }
@@ -66,37 +107,15 @@ class Api {
     return countries;
   }
 
-  static Future<List<String>> getCountriesFlags() async {
-  /// Fetches a list of unique country names from the VPN Gate API.
-
-    List<String> flags = [];
+  static Future<NetworkDetails> getIPDetails({ required NetworkDetails ipData }) async {
+    var ipdata;
     try {
-      final response = await get(Uri.parse('https://www.vpngate.net/api/iphone/'));
-
-      if (response.statusCode == 200) {
-
-        List<String> lines = response.body.split("\n");
-        print(lines);
-
-        Set<String> uniqueCountries = {};
-
-        for (int i = 2; i < lines.length; i++) {
-          List<String> serverInfo = lines[i].split(",");
-
-          if (serverInfo.length > 6) {
-            uniqueCountries.add(serverInfo[6]);
-          }
-        }
-
-        flags = uniqueCountries.toList();
-        print(flags);
-      } else {
-        print('Error: Unable to fetch data. Status code: ${response.statusCode}');
-      }
+      final response = await get(Uri.parse('http://ip-api.com/json/'));
+      final data = jsonDecode(response.body);
+      ipdata = NetworkDetails.fromJson(data);
     } catch (e) {
-      print('Error: $e');
+      print('\ngetIPDetailsError: $e');
     }
-
-    return flags;
+    return ipdata;
   }
 }

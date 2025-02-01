@@ -14,7 +14,7 @@ class VpnCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final homeProvider = Provider.of<HomeProvider>(context);
+    final homeProvider = Provider.of<VpnProvider>(context);
 
     return Container(        
         padding: EdgeInsets.symmetric(horizontal: 8),

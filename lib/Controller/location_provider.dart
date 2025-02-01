@@ -1,19 +1,26 @@
 import 'package:flutter/cupertino.dart';
 import 'package:vpn_app/Controller/api/apis.dart';
+import 'package:vpn_app/Controller/helpers/pref.dart';
 import 'package:vpn_app/Models/vpn.dart';
 
 class LocationProvider extends ChangeNotifier {
-  List<Vpn> _vpnList = [];
-  bool _isLoading = false;
-
+  List<Vpn> _vpnList = Pref.vpnList;
   List<Vpn> get vpnList => _vpnList;
-  bool get isLoading => _isLoading;
-
-  final List<String> _countryList = [];
-  final List<String> _flagList = [];
-
+  List<String> _countryList = Pref.getStoredCountries();
+  List<String> _flagList = Pref.getStoredCountryFlags();
   List<String> get countryList => _countryList;
   List<String> get flagList => _flagList;
+
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
+
+  Future<void> getVpnDataForFirstLoad() async {
+    _isLoading = true;
+    _vpnList.clear();
+    _vpnList = await Api.getVpnServers();
+    _isLoading = false;
+    notifyListeners();
+  }
 
   Future<void> getVpnData() async {
     _isLoading = true;
