@@ -11,7 +11,7 @@ class HomeCard extends StatelessWidget {
     required this.title,
     required this.subtitle,
     required this.icon,
-    this.image=null
+    this.image
   });
 
   @override

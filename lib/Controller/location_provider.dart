@@ -9,8 +9,8 @@ class LocationProvider extends ChangeNotifier {
   List<Vpn> get vpnList => _vpnList;
   bool get isLoading => _isLoading;
 
-  List<String> _countryList = [];
-  List<String> _flagList = [];
+  final List<String> _countryList = [];
+  final List<String> _flagList = [];
 
   List<String> get countryList => _countryList;
   List<String> get flagList => _flagList;

@@ -1,17 +1,58 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:vpn_app/Controller/helpers/pref.dart';
 import 'package:vpn_app/Controller/services/vpn_engine.dart';
 import 'package:vpn_app/Models/vpn.dart';
+import 'package:vpn_app/Models/vpn_configuration.dart';
 
 import 'package:vpn_app/Views/constant.dart';
 
-class HomeProvider extends ChangeNotifier {
+enum VpnState { disconnected, connected, connecting }
+
+class VpnProvider extends ChangeNotifier {
+  Vpn vpn = Pref.vpn;
   var vpnState = VpnEngine.vpnDisconnected;
-  Vpn? vpn;
+  String selectedVpnId = '';
 
   void changevpnState(vpnV){
-    vpnState=vpnV;
+    vpnState = vpnV;
     notifyListeners();
+  }
+
+  void setSelectedVpnId(String vpnId){
+    selectedVpnId = vpnId;
+    notifyListeners();
+  }
+// }
+
+// class HomeProvider extends ChangeNotifier {
+//   var vpnState = VpnEngine.vpnDisconnected;
+//   Vpn vpn = Pref.vpn;
+
+  connectToVpn(context) async {
+    if (vpn.openVPNConfigDataBase64.isEmpty) {
+      return ;
+    }
+
+    else if (vpnState == VpnEngine.vpnDisconnected) {
+      final data = Base64Decoder().convert(vpn.openVPNConfigDataBase64);
+      final config = Utf8Decoder().convert(data);
+      final vpnConfig = VpnConfig(
+        country: vpn.countryLong,
+        username: 'vpn',
+        password: 'vpn',
+        config: config,
+      );
+      await VpnEngine.startVpn(vpnConfig);
+      notifyListeners();
+    }
+    
+    else {
+      VpnEngine.stopVpn();
+      notifyListeners();
+    }
   }
 
   String get getButtonText{

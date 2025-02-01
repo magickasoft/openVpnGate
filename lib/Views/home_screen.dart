@@ -14,11 +14,19 @@ import 'constant.dart';
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
+
+
   @override
   Widget build(BuildContext context) {
     final homeProvider = Provider.of<HomeProvider>(context);
 
+    VpnEngine.vpnStatusSnapshot().listen((event) {
+      homeProvider.changevpnState(event);
+    });
+
     return Scaffold(
+      resizeToAvoidBottomInset: false,
+      extendBodyBehindAppBar: true,
       backgroundColor: primaryColor,
       appBar: AppBar(
         title: Text('VPN App'.toUpperCase(),
@@ -62,10 +70,6 @@ class HomeScreen extends StatelessWidget {
             ]
         ),
       )
-
-
-
-
     );
   }
 
@@ -77,7 +81,7 @@ class HomeScreen extends StatelessWidget {
     child: InkWell(
       borderRadius: BorderRadius.circular(100),
       onTap: (){
-        homeProvider.changevpnState(VpnEngine.vpnConnected);
+        homeProvider.connectToVpn(context);
       },
       child: Container(
       padding: EdgeInsets.all(16),
@@ -191,15 +195,15 @@ class HomeScreen extends StatelessWidget {
               children: [
                 Expanded(
                   child: HomeCard(
-                    title: homeProvider.vpn == null || homeProvider.vpn!.countryLong.isEmpty ? 'Country' : homeProvider.vpn!.countryLong,
+                    title: homeProvider.vpn.countryLong.isEmpty ? 'Country' : homeProvider.vpn.countryLong,
                     subtitle: 'Free',
                     icon: Icons.vpn_lock_rounded,
-                    image: homeProvider.vpn == null || homeProvider.vpn!.countryLong.isEmpty ? null : 'assets/flags/${homeProvider.vpn!.countryShort.toLowerCase()}.png',
+                    image: homeProvider.vpn.countryLong.isEmpty ? null : 'assets/flags/${homeProvider.vpn.countryShort.toLowerCase()}.png',
                   ),
                 ),
                 Expanded(
                   child: HomeCard(
-                    title: homeProvider.vpn == null || homeProvider.vpn!.countryLong.isEmpty ? '100 ms' : '${homeProvider.vpn!.ping} ms',
+                    title: homeProvider.vpn.countryLong.isEmpty ? '100 ms' : '${homeProvider.vpn.ping} ms',
                     subtitle: 'Ping',
                     icon: CupertinoIcons.chart_bar_alt_fill,
                   ),

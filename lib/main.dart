@@ -2,26 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vpn_app/Controller/helpers/pref.dart';
 import 'package:vpn_app/Controller/home_provider.dart';
 import 'package:vpn_app/Controller/location_provider.dart';
 import 'package:vpn_app/Views/on_boarding_screen.dart';
 import 'package:vpn_app/Views/splash_screen.dart';
 import 'package:vpn_app/Views/constant.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown]).then((_) {
-    runApp(const MyApp());
+  await Pref.initializeHive();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+    .then((_) {
+      runApp(MyApp());
   });
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}): super(key: key);
 
   @override
-  State<MyApp> createState() => _MyAppState();
+  _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {

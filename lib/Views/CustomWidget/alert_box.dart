@@ -14,7 +14,7 @@ class AlertBox extends StatelessWidget {
         alignment: Alignment.topCenter,
 
         children: [
-          Container(
+          SizedBox(
             height: 170,
             width: 280,
             child: Column(
