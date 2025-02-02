@@ -1,52 +1,53 @@
 import 'package:flutter/material.dart';
-import 'package:vpn_app/constant.dart';
+import 'package:vpn_app/Views/constant.dart';
 
 class HomeCard extends StatelessWidget {
   final String title, subtitle;
   final IconData icon;
+  final image;
+  final Color iconColor;
 
   const HomeCard(
-    {
-      super.key,
-      required this.title,
-      required this.subtitle,
-      required this.icon});
+  {super.key,
+  required this.title,
+  required this.subtitle,
+  required this.icon,this.image,this.iconColor=Colors.white});
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 150,
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              height: 50,
-              width: 50,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  begin: FractionalOffset.topRight,
-                  end: FractionalOffset.bottomLeft,
-                  colors: [
-                    blue,
-                    gradientblue,
-                  ]),
-              shape: BoxShape.circle,
+        child: Column(
+          children: [
+            ///icon
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: Container(
+                height: 50,
+                width: 50,
+                decoration:  image !=null ?  BoxDecoration(gradient:blueGradient,
+                    shape: BoxShape.circle,
+                 image: DecorationImage(image: AssetImage(image),fit: BoxFit.cover)
+                ):
+                BoxDecoration(gradient:blueGradient,
+                    shape: BoxShape.circle,
+                ) ,
+                child: Icon(icon,
+                    size: 26, color:iconColor),
               ),
-              child: Icon(icon,
-                size: 26, color: Colors.white,),
-                  ),
-              ),
-              Text(title,
-                style:btnStyle.copyWith(fontSize: 13.5,color: Colors.white),
+            ),
 
-              ),
-              SizedBox(height: 2,),
-              Text(subtitle,
-                style: greyStyle.copyWith(color: greytext),
-              )
-        ],
-      ),
-    );      
+            ///title
+            Text(title,
+                style: btnText.copyWith(fontSize: 13.5,color: white),overflow: TextOverflow.ellipsis),
+           SizedBox(height: 2,),
+
+
+           ///subtitle
+            Text(
+              subtitle,
+              style: grayTextStyle.copyWith(color: lightGray),
+            ),
+          ],
+        ));
   }
 }
