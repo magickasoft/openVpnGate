@@ -54,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     ///Add listener to update vpn state
     VpnEngine.vpnStageSnapshot().listen((event) {
-      homeProvider.changevpnState(event);
+      homeProvider.changeVpnState(event);
     });
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -127,7 +127,7 @@ class _HomeScreenState extends State<HomeScreen> {
       button: true,
       child: InkWell(
         onTap: () {
-          homeProvider.changevpnState(VpnEngine.vpnDisconnected);
+          homeProvider.changeVpnState(VpnEngine.vpnDisconnected);
           homeProvider.connectToVpn(context);
         },
         borderRadius: BorderRadius.circular(100),

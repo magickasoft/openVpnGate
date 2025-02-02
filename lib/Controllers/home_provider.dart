@@ -2,18 +2,18 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:vpn_app/Controllers/pref.dart';
 import 'package:vpn_app/Controllers/services/vpn_engine.dart';
-
 import 'package:vpn_app/Models/vpn.dart';
-import 'package:vpn_app/Models/vpn_Configuration.dart';
+import 'package:vpn_app/Models/vpn_configuration.dart';
 import 'package:vpn_app/Views/constant.dart';
 
 enum VpnState { disconnected, connected, connecting }
+
 
 class VpnProvider extends ChangeNotifier {
   Vpn vpn = Pref.vpn;
   var vpnState = VpnEngine.vpnDisconnected;
   String selectedVpnId = '';
-  void changevpnState(vpnV){
+  void changeVpnState(vpnV){
     vpnState=vpnV;
     notifyListeners();
   }
@@ -37,6 +37,7 @@ class VpnProvider extends ChangeNotifier {
           username: 'vpn',
           password: 'vpn',
           config: config);
+
 
       await VpnEngine.startVpn(vpnConfig);
       notifyListeners();
