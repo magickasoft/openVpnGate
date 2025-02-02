@@ -1,10 +1,9 @@
 import 'dart:convert';
 import 'dart:developer';
-
 import 'package:csv/csv.dart';
-import 'package:http/http.dart';
-import 'package:vpn_app/Controller/helpers/pref.dart';
-import 'package:vpn_app/Models/network_details.dart';
+import 'package:http/http.dart' as http;
+import 'package:vpn_app/Controllers/pref.dart';
+import 'package:vpn_app/Models/ip_details.dart';
 import 'package:vpn_app/Models/vpn.dart';
 
 class Api {
@@ -13,7 +12,7 @@ class Api {
     final List<Vpn> vpnList = [];
 
     try{
-      final res = await get(Uri.parse('https://www.vpngate.net/api/iphone/'));
+      final res = await http.get(Uri.parse('https://www.vpngate.net/api/iphone/'));
       final csvString = res.body.split("#")[1].replaceAll('*', '');
 
       List<List<dynamic>> list = const CsvToListConverter().convert(csvString);
@@ -44,7 +43,7 @@ class Api {
   static Future<List<String>> getCountriesFlags() async {
     List<String> flags = [];
     try {
-      final response = await get(Uri.parse('https://www.vpngate.net/api/iphone/'));
+      final response = await http.get(Uri.parse('https://www.vpngate.net/api/iphone/'));
 
       if (response.statusCode == 200) {
 
@@ -77,7 +76,7 @@ class Api {
   static Future<List<String>> getCountries() async {
     List<String> countries = [];
     try {
-      final response = await get(Uri.parse('https://www.vpngate.net/api/iphone/'));
+      final response = await http.get(Uri.parse('https://www.vpngate.net/api/iphone/'));
 
       if (response.statusCode == 200) {
 
@@ -110,7 +109,7 @@ class Api {
   static Future<NetworkDetails> getIPDetails({ required NetworkDetails ipData }) async {
     var ipdata;
     try {
-      final response = await get(Uri.parse('http://ip-api.com/json/'));
+      final response = await http.get(Uri.parse('http://ip-api.com/json/'));
       final data = jsonDecode(response.body);
       ipdata = NetworkDetails.fromJson(data);
     } catch (e) {

@@ -2,57 +2,56 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:vpn_app/Controller/helpers/pref.dart';
-import 'package:vpn_app/Controller/home_provider.dart';
-import 'package:vpn_app/Controller/services/vpn_engine.dart';
+import 'package:vpn_app/Controllers/pref.dart';
+import 'package:vpn_app/Controllers/home_provider.dart';
+import 'package:vpn_app/Controllers/services/vpn_engine.dart';
 import 'package:vpn_app/Models/vpn.dart';
 import 'package:vpn_app/Views/constant.dart';
 
 class VpnCard extends StatelessWidget {
   final Vpn vpn;
-  const VpnCard({super.key, required this.vpn});
+  const VpnCard({Key? key, required this.vpn}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final homeProvider = Provider.of<VpnProvider>(context);
+    final vpnProvider = Provider.of<VpnProvider>(context);
 
     return Container(        
         padding: EdgeInsets.symmetric(horizontal: 8),
         height: 60,
         child: InkWell(
-          onTap: (){
-            homeProvider.vpn=vpn;
+          onTap: () {
+            vpnProvider.vpn = vpn;
             Pref.vpn = vpn;
-        
             Navigator.pop(context);
-            if (homeProvider.vpnState == VpnEngine.vpnConnected) {
+            if (vpnProvider.vpnState == VpnEngine.vpnConnected) {
               VpnEngine.stopVpn();
               Future.delayed(
-                const Duration(seconds: 2), () = homeProvider.connectToVpn(context),);
-
+                  const Duration(seconds: 2), () => vpnProvider.connectToVpn(context));
             } else {
-              homeProvider.connectToVpn(context);
-            }
-          },
+              vpnProvider.connectToVpn(context);
+           }
+        },
           child: ListTile(
+          
+            //flag
             leading: Container(
               height: 30,
               width: 38,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('assets/flags/${vpn.countryShort.toLowerCase()}.png'),
-                  fit: BoxFit.fill,
-                ),
-              )
-            ),
-            title: Text(vpn.countryLong, style: boldStyle.copyWith(
-              color: Colors.white, fontSize: 15,
-            ),),
+              decoration: BoxDecoration(border: Border.all(color: gray.withOpacity(0.2)),
+                  image: DecorationImage(
+                      image: AssetImage('assets/flags/${vpn.countryShort.toLowerCase()}.png',
+                  ),fit: BoxFit.fill ))),
+
+            ///title
+            title: Text(vpn.countryLong,style: boldStyle.copyWith(fontSize: 15,color: white),),
+
+            ///subtitle
             subtitle: Row(
               children: [
-                Text(_formatBytes(vpn.speed, 1), style: mediumStyle.copyWith(color: greytext),),
-                SizedBox(width: 4,),
-                Icon(Icons.speed, color: iconBlueColor, size: 20,)
+                Image.asset('assets/images/Internetspeed.png',color: iconBlueColor,height: 20,),
+                const SizedBox(width: 4),
+                Text(_formatBytes(vpn.speed, 1), style: mediumStyle.copyWith(color:mediumGray,fontSize: 13))
               ],
             ),
           ),

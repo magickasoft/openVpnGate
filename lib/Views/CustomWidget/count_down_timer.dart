@@ -15,9 +15,7 @@ class _CountDownTimerState extends State<CountDownTimer> {
   Duration _duration = Duration();
   Timer? _timer;
 
-  void startTimer() {
-    if (_timer != null) return;
-
+  _startTimer() {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
         _duration = Duration(seconds: _duration.inSeconds + 1);
@@ -25,43 +23,25 @@ class _CountDownTimerState extends State<CountDownTimer> {
     });
   }
 
-  void stopTimer() {
-    if (_timer != null) {
-      _timer!.cancel();
-      _timer = null;
-    }
+  _stopTimer() {
     setState(() {
+      _timer?.cancel();
+      _timer = null;
       _duration = Duration();
     });
   }
 
   @override
-  void didUpdateWidget(covariant CountDownTimer oldWidget) {
-    super.didUpdateWidget(oldWidget);
-
-    if (widget.startTimer && _timer == null) {
-      startTimer();
-    } else if (!widget.startTimer && _timer != null) {
-      stopTimer();
-    }
-  }
-
-  @override
-  void dispose() {
-    _timer?.cancel();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    String twoDigits(int n) => n.toString().padLeft(2, '0');
-    final hours = twoDigits(_duration.inHours.remainder(24));
-    final minutes = twoDigits(_duration.inMinutes.remainder(60));
-    final seconds = twoDigits(_duration.inSeconds.remainder(60));
+    if (_timer == null || !widget.startTimer)
+      widget.startTimer ? _startTimer() : _stopTimer();
 
-    return Text(
-      '$hours:$minutes:$seconds',
-      style: boldStyle,
-    );
+    String twoDigit(int n) => n.toString().padLeft(2, '0');
+    final minutes = twoDigit(_duration.inMinutes.remainder(60));
+    final seconds = twoDigit(_duration.inSeconds.remainder(60));
+    final hours = twoDigit(_duration.inHours.remainder(60));
+
+    return Text('$hours: $minutes: $seconds',
+        style: boldStyle.copyWith(color: white,fontSize:20 ));
   }
 }

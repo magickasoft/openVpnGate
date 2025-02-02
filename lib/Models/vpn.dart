@@ -38,8 +38,8 @@ class Vpn {
     data['Speed'] = speed;
     data['CountryLong'] = countryLong;
     data['CountryShort'] = countryShort;
-    data['numVpnSessions'] = numVpnSessions;
-    data['openVPNConfigDataBase64'] = openVPNConfigDataBase64;
+    data['NumVpnSessions'] = numVpnSessions;
+    data['OpenVPNConfigDataBase64'] = openVPNConfigDataBase64;
     return data;
   }
 }
