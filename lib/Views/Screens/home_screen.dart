@@ -127,7 +127,7 @@ class _HomeScreenState extends State<HomeScreen> {
       button: true,
       child: InkWell(
         onTap: () {
-          // homeProvider.changevpnState(VpnEngine.vpnDisconnected);
+          homeProvider.changevpnState(VpnEngine.vpnDisconnected);
           homeProvider.connectToVpn(context);
         },
         borderRadius: BorderRadius.circular(100),

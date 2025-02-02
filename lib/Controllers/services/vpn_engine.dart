@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/services.dart';
-import 'package:vpn_app/Models/vpn_configuration.dart';
+import 'package:vpn_app/Models/vpn_Configuration.dart';
 import 'package:vpn_app/Models/vpn_status.dart';
 
 class VpnEngine {
