@@ -6,7 +6,7 @@ class DrawerItem extends StatelessWidget {
   final IconData leading;
   final String  title;
   final VoidCallback onTap;
-  DrawerItem({
+  const DrawerItem({super.key, 
     required this.leading,
     required this.title,
     required this.onTap,

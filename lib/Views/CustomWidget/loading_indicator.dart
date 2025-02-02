@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:vpn_app/Views/constant.dart';
 
 class loadingIndicator extends StatelessWidget {
-  loadingIndicator();
+  const loadingIndicator({super.key});
   @override
   Widget build(BuildContext context) {
     return Dialog(

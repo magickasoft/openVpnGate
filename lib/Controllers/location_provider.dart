@@ -25,7 +25,7 @@ class LocationProvider extends ChangeNotifier {
   Future<void> getVpnData() async {
     _isLoading = true;
     _vpnList.clear();
-    _vpnList = await Api.getVpnServers();
+    _vpnList = await Api.getVPNServers();
     _isLoading = false;
     notifyListeners();
   }
@@ -44,7 +44,7 @@ class LocationProvider extends ChangeNotifier {
     _isLoading = true;
      notifyListeners(); // Notify listeners that isLoading has changed
     _vpnList.clear();
-    _vpnList = await Api.getVpnServers();
+    _vpnList = await Api.getVPNServers();
     _countryList=await Api.getCountries();
     _flagList =await Api.getCountriesFlags();
     _isLoading = false;

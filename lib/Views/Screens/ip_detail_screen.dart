@@ -7,7 +7,7 @@ import 'package:vpn_app/Views/CustomWidget/ip_detail_card.dart';
 import 'package:vpn_app/Views/constant.dart';
 
 class IpDetailScreen extends StatefulWidget {
-  const IpDetailScreen({Key? key}) : super(key: key);
+  const IpDetailScreen({super.key});
 
   @override
   _IpDetailScreenState createState() => _IpDetailScreenState();

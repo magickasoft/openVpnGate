@@ -11,7 +11,7 @@ class HomeCard extends StatelessWidget {
   {super.key,
   required this.title,
   required this.subtitle,
-  required this.icon,this.image=null,this.iconColor=Colors.white});
+  required this.icon,this.image,this.iconColor=Colors.white});
 
   @override
   Widget build(BuildContext context) {

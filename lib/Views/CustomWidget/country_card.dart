@@ -9,7 +9,7 @@ class LocationCard extends StatelessWidget {
   final List<Widget> servers;
   final bool isExpanded;
 
-const LocationCard({required this.isExpanded,required this.servers,required this.tap,required this.flag,required this.countryName});
+const LocationCard({super.key, required this.isExpanded,required this.servers,required this.tap,required this.flag,required this.countryName});
 
   @override
   Widget build(BuildContext context) {

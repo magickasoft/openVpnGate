@@ -3,7 +3,7 @@ import 'package:vpn_app/Views/constant.dart';
 
 class AlertBox extends StatelessWidget {
   final String txt;
-  AlertBox({required this.txt});
+  const AlertBox({super.key, required this.txt});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class AlertBox extends StatelessWidget {
           clipBehavior: Clip.none,
           alignment: Alignment.topCenter,
           children: [
-            Container(
+            SizedBox(
               // color: App,
               height: 170,
               width: 280,

@@ -6,7 +6,7 @@ class IpDetailCard extends StatelessWidget {
   final String subtitle;
   final Widget child;
 
-  const IpDetailCard({Key? key,required this.title,required this.subtitle,required this.child}) : super(key: key);
+  const IpDetailCard({super.key,required this.title,required this.subtitle,required this.child});
 
   @override
   Widget build(BuildContext context) {

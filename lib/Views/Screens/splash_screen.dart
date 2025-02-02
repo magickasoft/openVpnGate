@@ -7,7 +7,7 @@ import 'package:vpn_app/Views/Screens/home_screen.dart';
 import 'package:vpn_app/Views/constant.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+  const SplashScreen({super.key});
 
   @override
   _SplashScreenState createState() => _SplashScreenState();
@@ -58,7 +58,7 @@ class _SplashScreenState extends State<SplashScreen> {
               ),
             ),
            Expanded(flex:3,child: Center(
-              child: Container(height: 50,width:50,child: CircularProgressIndicator(color: iconBlueColor,),),
+              child: SizedBox(height: 50,width:50,child: CircularProgressIndicator(color: iconBlueColor,),),
             )),
 
           ],

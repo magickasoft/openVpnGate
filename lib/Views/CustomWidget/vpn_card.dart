@@ -10,7 +10,7 @@ import 'package:vpn_app/Views/constant.dart';
 
 class VpnCard extends StatelessWidget {
   final Vpn vpn;
-  const VpnCard({Key? key, required this.vpn}) : super(key: key);
+  const VpnCard({super.key, required this.vpn});
 
   @override
   Widget build(BuildContext context) {

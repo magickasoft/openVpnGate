@@ -15,7 +15,7 @@ class LocationScreen extends StatefulWidget {
    final List<String> countries;
    final List<String> flags;
 
-  LocationScreen({Key? key,required this.serverList,required this.flags,required this.countries}) : super(key: key);
+  const LocationScreen({super.key,required this.serverList,required this.flags,required this.countries});
 
   @override
   _LocationScreenState createState() => _LocationScreenState();
@@ -105,7 +105,7 @@ class _LocationScreenState extends State<LocationScreen> {
       ),
 
       body: SingleChildScrollView(
-        child: Container(
+        child: SizedBox(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
           child: Column(

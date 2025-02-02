@@ -10,7 +10,7 @@ import 'package:vpn_app/Views/constant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class OnBoardingScreen extends StatefulWidget {
-  const OnBoardingScreen({Key? key}) : super(key: key);
+  const OnBoardingScreen({super.key});
 
   @override
   OnBoardingScreenState createState() => OnBoardingScreenState();
@@ -47,12 +47,12 @@ class OnBoardingScreenState extends State<OnBoardingScreen> {
               controller: _pagecontroller,
               itemCount: contents.length,
               onPageChanged: (int index) {
-                if(index > 0)
+                if(index > 0) {
                   setState(() {
                     currentIndex = index;
                   });
-                else{
-                  return null;
+                } else{
+                  return;
                 }
               },
               itemBuilder: (context, i) {
@@ -104,7 +104,7 @@ class OnBoardingScreenState extends State<OnBoardingScreen> {
           ///Dot show Current PAge
           Expanded(
             flex: 1,
-            child: Container(
+            child: SizedBox(
               height: 8,
               width: MediaQuery.of(context).size.width,
               child: Row(
