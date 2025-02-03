@@ -7,7 +7,6 @@
 package com.example.vpn_app
 
 import io.flutter.embedding.android.FlutterActivity
-
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
