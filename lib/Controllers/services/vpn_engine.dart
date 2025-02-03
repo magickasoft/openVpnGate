@@ -4,25 +4,31 @@ import 'package:vpn_app/Models/vpn_configuration.dart';
 import 'package:vpn_app/Models/vpn_status.dart';
 
 class VpnEngine {
-  ///Channel to native
-  static final String _eventChannelVpnStage = "vpnStage";
-  static final String _eventChannelVpnStatus = "vpnStatus";
-  static final String _methodChannelVpnControl = "vpnControl";
+  /// Каналы связи с нативным кодом
+  static const String _eventChannelVpnStage = "vpnStage";
+  static const String _eventChannelVpnStatus = "vpnStatus";
+  static const String _methodChannelVpnControl = "vpnControl";
 
-  ///Snapshot of VPN Connection Stage
+  /// Снимок состояния VPN-подключения
   static Stream<String> vpnStageSnapshot() =>
-      EventChannel(_eventChannelVpnStage).receiveBroadcastStream().cast();
+      EventChannel(_eventChannelVpnStage)
+          .receiveBroadcastStream()
+          .map((event) => event.toString());
 
-  ///Snapshot of VPN Connection Status
+  /// Снимок статуса VPN
   static Stream<VpnStatus> vpnStatusSnapshot() =>
       EventChannel(_eventChannelVpnStatus)
           .receiveBroadcastStream()
-          .map((event) => VpnStatus.fromJson(jsonDecode(event)))
-          .cast();
+          .map((event) {
+            try {
+              return VpnStatus.fromJson(jsonDecode(event));
+            } catch (e) {
+              throw Exception("Ошибка парсинга VPN-статуса: $e");
+            }
+          });
 
-  ///Start VPN easily
+  /// Запуск VPN
   static Future<void> startVpn(VpnConfig vpnConfig) async {
-    // log(vpnConfig.config);
     return MethodChannel(_methodChannelVpnControl).invokeMethod(
       "start",
       {
@@ -34,27 +40,29 @@ class VpnEngine {
     );
   }
 
-  ///Stop vpn
+  /// Остановка VPN
   static Future<void> stopVpn() =>
       MethodChannel(_methodChannelVpnControl).invokeMethod("stop");
 
-  ///Open VPN Settings
+  /// Открытие настроек Kill Switch
   static Future<void> openKillSwitch() =>
       MethodChannel(_methodChannelVpnControl).invokeMethod("kill_switch");
 
-  ///Trigger native to get stage connection
+  /// Обновление состояния VPN
   static Future<void> refreshStage() =>
       MethodChannel(_methodChannelVpnControl).invokeMethod("refresh");
 
-  ///Get latest stage
+  /// Получение текущего состояния VPN
   static Future<String?> stage() =>
       MethodChannel(_methodChannelVpnControl).invokeMethod("stage");
 
-  ///Check if vpn is connected
-  static Future<bool> isConnected() =>
-      stage().then((value) => value?.toLowerCase() == "connected");
+  /// Проверка, подключен ли VPN
+  static Future<bool> isConnected() async {
+    final stageValue = await stage();
+    return (stageValue ?? "").toLowerCase() == vpnConnected;
+  }
 
-  ///All Stages of connection
+  /// Стадии подключения VPN
   static const String vpnConnected = "connected";
   static const String vpnDisconnected = "disconnected";
   static const String vpnWaitConnection = "wait_connection";
