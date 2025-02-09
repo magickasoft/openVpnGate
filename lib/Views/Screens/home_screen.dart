@@ -12,6 +12,7 @@ import 'package:vpn_app/Views/CustomWidget/count_down_timer.dart';
 import 'package:vpn_app/Views/CustomWidget/home_card.dart';
 import 'package:vpn_app/Views/Screens/ip_detail_screen.dart';
 import 'package:vpn_app/Views/Screens/location_screen.dart';
+import 'package:vpn_app/Views/Screens/side_navigation_bar.dart';
 import '../constant.dart';
 
 
@@ -59,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       extendBodyBehindAppBar: true,
-      // drawer: Container(width: 240, child: SideNavigationBar(),color: Colors.transparent,),
+      drawer: Container(width: 240, child: SideNavigationBar(),color: Colors.transparent,),
       appBar: AppBar(
         title: Text('SwiftShield'.toUpperCase(),
             style: logoText.copyWith(fontSize:22,color:white)),
